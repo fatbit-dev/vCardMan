@@ -9,8 +9,8 @@ from PyQt5.QtWidgets import (
 )
 from PyQt5.QtCore import Qt
 
-from .editor import VCardEditor
-from .vcard_utils import contact_display_name, card_matches, clean_card_whitespace
+from vcardman.ui.editor import VCardEditor
+from vcardman.utils.vcard_utils import contact_display_name, card_matches, clean_card_whitespace
 
 
 class MainWindow(QMainWindow):
@@ -81,7 +81,7 @@ class MainWindow(QMainWindow):
         left_layout.addWidget(QLabel("Contacts"))
 
         self._search_box = QLineEdit()
-        self._search_box.setPlaceholderText("Search contacts…")
+        self._search_box.setPlaceholderText("Search contacts\u2026")
         self._search_box.textChanged.connect(self._on_search_changed)
         left_layout.addWidget(self._search_box)
 
@@ -285,9 +285,9 @@ class MainWindow(QMainWindow):
 
     def _delete_contact(self):
         row = self._contact_list.currentRow()
-        if row < 0 or row >= len(self._sorted_vcards):
+        if row < 0 or row >= len(self._filtered_vcards):
             return
-        card = self._sorted_vcards[row]
+        card = self._filtered_vcards[row]
         reply = QMessageBox.question(
             self, "Delete Contact",
             f"Delete '{contact_display_name(card)}'?",

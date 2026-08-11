@@ -109,7 +109,6 @@ def get_photo_data(card) -> bytes:
     if isinstance(val, bytes):
         return val
     if isinstance(val, str):
-        # May be base64 encoded string
         import base64
         try:
             return base64.b64decode(val)

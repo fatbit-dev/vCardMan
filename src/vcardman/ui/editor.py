@@ -7,7 +7,7 @@ from PyQt5.QtWidgets import (
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap
 
-from .vcard_utils import get_field, get_all_fields, clean_card_whitespace, get_photo_data
+from vcardman.utils.vcard_utils import get_field, get_all_fields, clean_card_whitespace, get_photo_data
 
 
 class VCardEditor(QWidget):
@@ -131,6 +131,7 @@ class VCardEditor(QWidget):
             for te in self._multi.values():
                 te.clear()
             self._note.clear()
+            self._photo_label.clear()
             return
 
         self._fields["fn"].setText(get_field(card, "fn"))
