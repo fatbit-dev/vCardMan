@@ -107,8 +107,9 @@ class MainWindow(QMainWindow):
 
         splitter.addWidget(left)
         splitter.addWidget(self._editor)
-        splitter.setStretchFactor(0, 1)
-        splitter.setStretchFactor(1, 3)
+        splitter.setStretchFactor(0, 13)
+        splitter.setStretchFactor(1, 30)
+        splitter.setSizes([270, 630])
 
         self.setCentralWidget(splitter)
 

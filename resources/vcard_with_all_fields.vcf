@@ -1,0 +1,26 @@
+BEGIN:VCARD
+VERSION:3.0
+N:Doe;John;Alexander;Mr.;
+FN:Mr. John Alexander Doe
+NICKNAME:Johnny
+ORG:Acme Corporation
+TITLE:Senior Software Engineer
+ROLE:Platform Team Lead
+EMAIL;TYPE=WORK:john.doe@acme.com
+EMAIL;TYPE=HOME:john.doe.personal@example.com
+TEL;TYPE=WORK,VOICE:+1-555-1001
+TEL;TYPE=CELL:+1-555-2001
+TEL;TYPE=HOME:+1-555-3001
+ADR;TYPE=WORK:;;123 Business Ave;New York;NY;10001;USA
+ADR;TYPE=HOME:;;45 Home Street;Brooklyn;NY;11201;USA
+URL:https://www.acme.com
+URL:https://johndoe.dev
+BDAY:1985-04-15
+GENDER:M
+NOTE:Sample contact generated for testing purposes.
+CATEGORIES:Engineering,Leadership
+X-SOCIALPROFILE;TYPE=linkedin:https://linkedin.com/in/johndoe
+X-SOCIALPROFILE;TYPE=github:https://github.com/johndoe
+PHOTO;ENCODING=b;TYPE=PNG:iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAJUbSioAAAAASUVORK5CYII=
+REV:20260811T220000Z
+END:VCARD

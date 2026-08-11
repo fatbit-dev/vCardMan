@@ -97,3 +97,22 @@ def clean_card_whitespace(card):
         for obj in objs:
             if isinstance(obj.value, str):
                 obj.value = _normalize_whitespace(obj.value)
+
+
+def get_photo_data(card) -> bytes:
+    """Extract PHOTO field from vCard and return image bytes, or empty bytes if none."""
+    photo_obj = card.contents.get("photo")
+    if not photo_obj:
+        return b""
+    photo = photo_obj[0]
+    val = photo.value
+    if isinstance(val, bytes):
+        return val
+    if isinstance(val, str):
+        # May be base64 encoded string
+        import base64
+        try:
+            return base64.b64decode(val)
+        except Exception:
+            return b""
+    return b""

@@ -2,11 +2,12 @@ import vobject
 
 from PyQt5.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QFormLayout, QLineEdit, QTextEdit,
-    QPushButton, QScrollArea, QSizePolicy, QFrame,
+    QPushButton, QScrollArea, QSizePolicy, QFrame, QLabel,
 )
 from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QPixmap
 
-from .vcard_utils import get_field, get_all_fields, clean_card_whitespace
+from .vcard_utils import get_field, get_all_fields, clean_card_whitespace, get_photo_data
 
 
 class VCardEditor(QWidget):
@@ -24,10 +25,15 @@ class VCardEditor(QWidget):
         outer = QVBoxLayout(self)
         outer.setContentsMargins(8, 8, 8, 8)
 
+        # Horizontal layout: form on left, photo on right
+        content_layout = QHBoxLayout()
+        content_layout.setContentsMargins(0, 0, 0, 0)
+
+        # Left side: scroll area with form
         scroll = QScrollArea()
         scroll.setWidgetResizable(True)
         scroll.setFrameShape(QFrame.NoFrame)
-        outer.addWidget(scroll)
+        content_layout.addWidget(scroll)
 
         container = QWidget()
         scroll.setWidget(container)
@@ -83,6 +89,24 @@ class VCardEditor(QWidget):
         btn_layout.addWidget(self._cancel_btn)
         form.addRow("", btn_row)
 
+        # Right side: photo display
+        photo_panel = QWidget()
+        photo_layout = QVBoxLayout(photo_panel)
+        photo_layout.setContentsMargins(0, 0, 0, 0)
+        photo_layout.addWidget(QLabel("Photo"))
+        self._photo_label = QLabel()
+        self._photo_label.setMaximumWidth(200)
+        self._photo_label.setMaximumHeight(200)
+        self._photo_label.setScaledContents(True)
+        self._photo_label.setStyleSheet("border: 1px solid gray;")
+        photo_layout.addWidget(self._photo_label, 1, Qt.AlignTop | Qt.AlignHCenter)
+        photo_layout.addStretch()
+        content_layout.addWidget(photo_panel)
+
+        content_layout.setStretchFactor(scroll, 2)
+        content_layout.setStretchFactor(photo_panel, 1)
+        outer.addLayout(content_layout)
+
         self.set_card(None)
 
     # ------------------------------------------------------------------
@@ -127,6 +151,18 @@ class VCardEditor(QWidget):
             te.setPlainText("\n".join(values))
 
         self._note.setPlainText(get_field(card, "note"))
+
+        # Load and display photo
+        photo_data = get_photo_data(card)
+        if photo_data:
+            pixmap = QPixmap()
+            pixmap.loadFromData(photo_data)
+            if not pixmap.isNull():
+                self._photo_label.setPixmap(pixmap)
+            else:
+                self._photo_label.clear()
+        else:
+            self._photo_label.clear()
 
     # ------------------------------------------------------------------
 
