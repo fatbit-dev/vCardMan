@@ -1,4 +1,5 @@
 import vobject
+import base64
 
 
 def get_field(card, field_name, default=""):
@@ -97,6 +98,17 @@ def clean_card_whitespace(card):
         for obj in objs:
             if isinstance(obj.value, str):
                 obj.value = _normalize_whitespace(obj.value)
+
+
+def normalize_binary_fields(card):
+    """Convert bytes values to base64 text so vobject can serialize safely."""
+    for objs in card.contents.values():
+        for obj in objs:
+            if isinstance(obj.value, (bytes, bytearray)):
+                obj.value = base64.b64encode(bytes(obj.value)).decode("ascii")
+                if hasattr(obj, "params") and isinstance(obj.params, dict):
+                    if "ENCODING" not in obj.params:
+                        obj.params["ENCODING"] = ["BASE64"]
 
 
 def get_photo_data(card) -> bytes:

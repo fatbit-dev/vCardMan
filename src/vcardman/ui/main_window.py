@@ -10,7 +10,12 @@ from PyQt5.QtWidgets import (
 from PyQt5.QtCore import Qt
 
 from vcardman.ui.editor import VCardEditor
-from vcardman.utils.vcard_utils import contact_display_name, card_matches, clean_card_whitespace
+from vcardman.utils.vcard_utils import (
+    contact_display_name,
+    card_matches,
+    clean_card_whitespace,
+    normalize_binary_fields,
+)
 
 
 class MainWindow(QMainWindow):
@@ -204,21 +209,26 @@ class MainWindow(QMainWindow):
         )
         if not path:
             return
-        self._write_file(path)
+        previous_file = self._current_file
         self._current_file = path
+        if not self._write_file(path):
+            self._current_file = previous_file
+            self._update_status()
 
     def _write_file(self, path):
         try:
             with open(path, "w", encoding="utf-8") as fh:
                 for card in self._vcards:
                     clean_card_whitespace(card)
+                    normalize_binary_fields(card)
                     fh.write(card.serialize())
         except Exception as exc:
             QMessageBox.critical(self, "Error", f"Failed to save file:\n{exc}")
-            return
+            return False
         self._dirty = False
         self._update_status()
         self._statusbar.showMessage(f"Saved to {path}", 4000)
+        return True
 
     # ------------------------------------------------------------------
     # Contact list
